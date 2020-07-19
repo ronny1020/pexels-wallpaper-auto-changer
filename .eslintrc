@@ -1,0 +1,20 @@
+{
+  "extends": [
+    "@react-native-community",
+    "airbnb-typescript",
+    "prettier",
+    "prettier/@typescript-eslint",
+    "prettier/react"
+  ],
+  "plugins": ["prettier", "react-hooks", "react-native"],
+  "rules": {
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto"
+      }
+    ],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn"
+  }
+}
