@@ -1,14 +1,13 @@
 import * as WebBrowser from 'expo-web-browser'
 import React, { useState, useEffect } from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, FlatList } from 'react-native'
 
 import { PexelsPhotosObject } from '../types'
-// import Colors from '../constants/Colors'
-// import { MonoText } from './StyledText'
 import { Text, View } from './Themed'
 import { createClient } from 'pexels'
+import PhotoCard from './PhotoCard'
 
-export default function EditScreenInfo() {
+export default function MainContent() {
   const [PexelsPhotos, setPexelsPhotos] = useState<
     PexelsPhotosObject | undefined
   >(undefined)
@@ -30,42 +29,37 @@ export default function EditScreenInfo() {
   }, [])
 
   return (
-    <View>
+    <View style={styles.Container}>
       <View style={styles.getStartedContainer}>
         <Text
           style={styles.getStartedText}
           lightColor="rgba(0,0,0,0.8)"
           darkColor="rgba(255,255,255,0.8)"
-        >
-          {JSON.stringify(PexelsPhotos)}
-        </Text>
+        ></Text>
 
-        <Text
-          style={styles.getStartedText}
-          lightColor="rgba(0,0,0,0.8)"
-          darkColor="rgba(255,255,255,0.8)"
-        >
-          Change any of the text, save the file, and your app will automatically
-          update.
-        </Text>
+        <FlatList
+          data={PexelsPhotos ? PexelsPhotos.photos : []}
+          renderItem={({ item }) => (
+            <PhotoCard key={item.id.toString()} src={item.src.large} />
+          )}
+        />
       </View>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
+  Container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: 'red',
   },
   contentContainer: {
     paddingTop: 30,
   },
   getStartedContainer: {
+    flex: 1,
     alignItems: 'center',
-    marginHorizontal: 50,
   },
-
   getStartedText: {
     fontSize: 17,
     lineHeight: 24,

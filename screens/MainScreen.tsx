@@ -6,7 +6,7 @@ import { Text, View, ScrollView } from '../components/Themed'
 
 export default function TabOneScreen() {
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={{ alignItems: 'center' }}>
       <Text style={styles.title}>Main</Text>
       <View
         style={styles.separator}
