@@ -1,8 +1,8 @@
 import * as React from 'react'
-import { StyleSheet, ScrollView } from 'react-native'
+import { StyleSheet } from 'react-native'
 
 import MainContent from '../components/MainContent'
-import { Text, View } from '../components/Themed'
+import { Text, View, ScrollView } from '../components/Themed'
 
 export default function TabOneScreen() {
   return (

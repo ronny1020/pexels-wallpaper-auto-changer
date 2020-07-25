@@ -20,7 +20,7 @@ export default function EditScreenInfo() {
     const query: string = 'Nature'
     const photos: any = await client.photos.search({
       query,
-      per_page: 10,
+      per_page: 3,
     })
     setPexelsPhotos(photos)
   }
