@@ -1,12 +1,12 @@
 import * as React from 'react'
-import { StyleSheet } from 'react-native'
+import { StyleSheet, ScrollView } from 'react-native'
 
 import MainContent from '../components/MainContent'
 import { Text, View } from '../components/Themed'
 
 export default function TabOneScreen() {
   return (
-    <View style={styles.container}>
+    <ScrollView>
       <Text style={styles.title}>Main</Text>
       <View
         style={styles.separator}
@@ -14,16 +14,11 @@ export default function TabOneScreen() {
         darkColor="rgba(255,255,255,0.1)"
       />
       <MainContent />
-    </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
   title: {
     fontSize: 20,
     fontWeight: 'bold',
