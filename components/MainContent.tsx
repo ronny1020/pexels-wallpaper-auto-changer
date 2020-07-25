@@ -53,9 +53,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'red',
   },
-  contentContainer: {
-    paddingTop: 30,
-  },
   getStartedContainer: {
     flex: 1,
     alignItems: 'center',

@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   },
   Image: {
     flex: 1,
-    width: 100,
-    height: 100,
+    width: win.width * 0.9,
+    height: (win.width * 0.9 * 4) / 3,
   },
 })
