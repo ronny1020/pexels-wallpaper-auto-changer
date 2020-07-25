@@ -4,7 +4,10 @@
     "airbnb-typescript",
     "prettier",
     "prettier/@typescript-eslint",
-    "prettier/react"
+    "prettier/react",
+    "prettier/react",
+    "prettier/standard",
+    "plugin:prettier/recommended"
   ],
   "plugins": ["prettier", "react-hooks", "react-native"],
   "rules": {
