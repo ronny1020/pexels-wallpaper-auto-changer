@@ -6,7 +6,7 @@ import { SearchBar } from 'react-native-elements'
 import { PexelsPhotosObject, PexelsPhotoDetail } from '../types'
 import { View, Text } from './Themed'
 
-const createClient = require('pexels')
+const { createClient } = require('pexels')
 
 import PhotoCard from './PhotoCard'
 
@@ -15,7 +15,7 @@ export default function MainContent() {
   const [keyword, setKeyword] = useState<string>('nature')
   const [showedItemsNum, setShowedItemsNum] = useState<number>(5)
 
-  const per_page: number = 80
+  const per_page: number = 20
 
   const SearchPexels = async (
     query: string,
@@ -34,7 +34,7 @@ export default function MainContent() {
 
   const getPhotos = async (query: string) => {
     let photosList: PexelsPhotoDetail[] = []
-    for (let i = 1; i < Math.ceil(showedItemsNum / per_page); i++) {
+    for (let i = 1; i <= Math.ceil(showedItemsNum / per_page); i++) {
       const newPhotos: PexelsPhotosObject = await SearchPexels(query, i)
       photosList = [...photosList, ...newPhotos.photos]
     }
@@ -48,6 +48,7 @@ export default function MainContent() {
 
   const endReached = () => {
     setShowedItemsNum(showedItemsNum + 3)
+    getPhotos(keyword)
   }
 
   useEffect(() => {
