@@ -1,47 +1,49 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native'
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Dimensions,
+  ActivityIndicator,
+} from 'react-native'
+import { Image, Card, Text } from 'react-native-elements'
 
-import { View } from './Themed'
 const win = Dimensions.get('window')
 
-type CardProps = { src: string }
+type CardProps = { src: string; photographer: string }
 
 export default function PhotoCard(props: CardProps) {
   return (
-    <View style={styles.PhotoCard}>
-      <TouchableOpacity style={styles.TouchableOpacity}>
+    <TouchableOpacity style={styles.Card}>
+      <Card>
         <Image
           style={styles.Image}
           source={{
             uri: props.src,
           }}
+          PlaceholderContent={<ActivityIndicator />}
         />
-      </TouchableOpacity>
-    </View>
+        <Text h4 h4Style={styles.h4}>
+          by {props.photographer}
+        </Text>
+      </Card>
+    </TouchableOpacity>
   )
 }
 
 const styles = StyleSheet.create({
-  PhotoCard: {
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.23,
-    shadowRadius: 2.62,
-    flex: 1,
-    elevation: 4,
-    borderRadius: 3,
-    margin: 10,
-    padding: 10,
+  h4: {
+    fontSize: 16,
+    padding: 0,
   },
-  TouchableOpacity: {
+  Card: {
+    margin: 10,
     flex: 1,
+    alignItems: 'center',
+    padding: 0,
   },
   Image: {
     flex: 1,
-    width: win.width * 0.9,
-    height: (win.width * 0.9 * 4) / 3,
+    width: win.width * 0.8,
+    height: (win.width * 0.8 * 4) / 3,
   },
 })

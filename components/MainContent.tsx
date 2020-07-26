@@ -1,49 +1,59 @@
 import * as WebBrowser from 'expo-web-browser'
 import React, { useState, useEffect } from 'react'
 import { StyleSheet, FlatList } from 'react-native'
+import { SearchBar } from 'react-native-elements'
 
 import { PexelsPhotosObject } from '../types'
-import { Text, View } from './Themed'
+import { Text, View, ScrollView } from './Themed'
 import { createClient } from 'pexels'
 import PhotoCard from './PhotoCard'
+import { setStatusBarBackgroundColor } from 'expo-status-bar'
 
 export default function MainContent() {
   const [PexelsPhotos, setPexelsPhotos] = useState<
     PexelsPhotosObject | undefined
   >(undefined)
 
-  const SearchPexels = async () => {
+  const [keyword, setKeyword] = useState<string>('nature')
+
+  const SearchPexels = async (query: string) => {
     const client = createClient(
       '563492ad6f9170000100000192566700df22457981e0b9c246048847'
     )
-    const query: string = 'Nature'
     const photos: any = await client.photos.search({
       query,
-      per_page: 3,
+      per_page: 10,
     })
     setPexelsPhotos(photos)
   }
 
+  const updateSearch = (keyword: string) => {
+    setKeyword(keyword)
+  }
+
   useEffect(() => {
-    SearchPexels()
-  }, [])
+    SearchPexels(keyword)
+  }, [keyword])
 
   return (
     <View style={styles.Container}>
-      <View style={styles.getStartedContainer}>
-        <Text
-          style={styles.getStartedText}
-          lightColor="rgba(0,0,0,0.8)"
-          darkColor="rgba(255,255,255,0.8)"
-        ></Text>
-
+      <SearchBar
+        placeholder="Type Here..."
+        onChangeText={updateSearch}
+        value={keyword}
+      />
+      <ScrollView>
         <FlatList
           data={PexelsPhotos ? PexelsPhotos.photos : []}
           renderItem={({ item }) => (
-            <PhotoCard key={item.id.toString()} src={item.src.large} />
+            <PhotoCard
+              key={item.id.toString()}
+              src={item.src.large}
+              photographer={item.photographer}
+            />
           )}
         />
-      </View>
+      </ScrollView>
     </View>
   )
 }
@@ -51,11 +61,6 @@ export default function MainContent() {
 const styles = StyleSheet.create({
   Container: {
     flex: 1,
-    backgroundColor: 'red',
-  },
-  getStartedContainer: {
-    flex: 1,
-    alignItems: 'center',
   },
   getStartedText: {
     fontSize: 17,
