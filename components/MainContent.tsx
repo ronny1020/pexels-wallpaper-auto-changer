@@ -4,27 +4,41 @@ import { StyleSheet, FlatList } from 'react-native'
 import { SearchBar } from 'react-native-elements'
 
 import { PexelsPhotosObject, PexelsPhotoDetail } from '../types'
-import { View } from './Themed'
-import { createClient } from 'pexels'
+import { View, Text } from './Themed'
+
+const createClient = require('pexels')
+
 import PhotoCard from './PhotoCard'
 
 export default function MainContent() {
-  const [PexelsPhotos, setPexelsPhotos] = useState<
-    PexelsPhotosObject | undefined
-  >(undefined)
-
+  const [PexelsPhotos, setPexelsPhotos] = useState<PexelsPhotoDetail[]>([])
   const [keyword, setKeyword] = useState<string>('nature')
   const [showedItemsNum, setShowedItemsNum] = useState<number>(5)
 
-  const SearchPexels = async (query: string) => {
+  const per_page: number = 80
+
+  const SearchPexels = async (
+    query: string,
+    page: number
+  ): Promise<PexelsPhotosObject> => {
     const client = createClient(
       '563492ad6f9170000100000192566700df22457981e0b9c246048847'
     )
-    const photos: any = await client.photos.search({
+    const photos: PexelsPhotosObject = await client.photos.search({
       query,
-      per_page: 80,
+      page,
+      per_page,
     })
-    setPexelsPhotos(photos)
+    return photos
+  }
+
+  const getPhotos = async (query: string) => {
+    let photosList: PexelsPhotoDetail[] = []
+    for (let i = 1; i < Math.ceil(showedItemsNum / per_page); i++) {
+      const newPhotos: PexelsPhotosObject = await SearchPexels(query, i)
+      photosList = [...photosList, ...newPhotos.photos]
+    }
+    setPexelsPhotos(photosList)
   }
 
   const updateSearch = (keyword: string) => {
@@ -37,7 +51,7 @@ export default function MainContent() {
   }
 
   useEffect(() => {
-    SearchPexels(keyword)
+    getPhotos(keyword)
   }, [keyword])
 
   return (
@@ -47,9 +61,9 @@ export default function MainContent() {
         onChangeText={updateSearch}
         value={keyword}
       />
-      {PexelsPhotos ? (
+      {PexelsPhotos.length ? (
         <FlatList
-          data={PexelsPhotos.photos}
+          data={PexelsPhotos}
           keyExtractor={(item: PexelsPhotoDetail) => item.id.toString()}
           renderItem={({ item, index }) =>
             index <= showedItemsNum ? (
