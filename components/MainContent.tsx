@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, FlatList } from 'react-native'
 import { SearchBar } from 'react-native-elements'
 
-import { PexelsPhotosObject } from '../types'
+import { PexelsPhotosObject, PexelsPhotoDetail } from '../types'
 import { Text, View, ScrollView } from './Themed'
 import { createClient } from 'pexels'
 import PhotoCard from './PhotoCard'
@@ -42,18 +42,17 @@ export default function MainContent() {
         onChangeText={updateSearch}
         value={keyword}
       />
-      <ScrollView>
+      {/* <ScrollView> */}
+      {PexelsPhotos ? (
         <FlatList
-          data={PexelsPhotos ? PexelsPhotos.photos : []}
-          renderItem={({ item }) => (
-            <PhotoCard
-              key={item.id.toString()}
-              src={item.src.large}
-              photographer={item.photographer}
-            />
+          data={PexelsPhotos.photos}
+          keyExtractor={(item: PexelsPhotoDetail) => item.id.toString()}
+          renderItem={({ item }: { item: PexelsPhotoDetail }) => (
+            <PhotoCard src={item.src.large} photographer={item.photographer} />
           )}
         />
-      </ScrollView>
+      ) : null}
+      {/* </ScrollView> */}
     </View>
   )
 }
