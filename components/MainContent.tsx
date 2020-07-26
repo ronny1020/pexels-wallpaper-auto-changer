@@ -4,10 +4,9 @@ import { StyleSheet, FlatList } from 'react-native'
 import { SearchBar } from 'react-native-elements'
 
 import { PexelsPhotosObject, PexelsPhotoDetail } from '../types'
-import { Text, View, ScrollView } from './Themed'
+import { View } from './Themed'
 import { createClient } from 'pexels'
 import PhotoCard from './PhotoCard'
-import { setStatusBarBackgroundColor } from 'expo-status-bar'
 
 export default function MainContent() {
   const [PexelsPhotos, setPexelsPhotos] = useState<
@@ -15,6 +14,7 @@ export default function MainContent() {
   >(undefined)
 
   const [keyword, setKeyword] = useState<string>('nature')
+  const [showedItemsNum, setShowedItemsNum] = useState<number>(5)
 
   const SearchPexels = async (query: string) => {
     const client = createClient(
@@ -22,13 +22,18 @@ export default function MainContent() {
     )
     const photos: any = await client.photos.search({
       query,
-      per_page: 10,
+      per_page: 80,
     })
     setPexelsPhotos(photos)
   }
 
   const updateSearch = (keyword: string) => {
     setKeyword(keyword)
+    setShowedItemsNum(5)
+  }
+
+  const endReached = () => {
+    setShowedItemsNum(showedItemsNum + 3)
   }
 
   useEffect(() => {
@@ -42,17 +47,22 @@ export default function MainContent() {
         onChangeText={updateSearch}
         value={keyword}
       />
-      {/* <ScrollView> */}
       {PexelsPhotos ? (
         <FlatList
           data={PexelsPhotos.photos}
           keyExtractor={(item: PexelsPhotoDetail) => item.id.toString()}
-          renderItem={({ item }: { item: PexelsPhotoDetail }) => (
-            <PhotoCard src={item.src.large} photographer={item.photographer} />
-          )}
+          renderItem={({ item, index }) =>
+            index <= showedItemsNum ? (
+              <PhotoCard
+                src={item.src.large}
+                photographer={item.photographer}
+              />
+            ) : null
+          }
+          onEndReached={endReached}
+          onEndReachedThreshold={0.3}
         />
       ) : null}
-      {/* </ScrollView> */}
     </View>
   )
 }
